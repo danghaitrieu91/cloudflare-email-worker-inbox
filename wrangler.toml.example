@@ -1,0 +1,22 @@
+name = "your-email-worker-name"
+main = "src/worker.js"
+workers_dev = true
+compatibility_date = "2000-01-01"
+
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
+
+[vars]
+TARGET_EMAIL = "your-email@yourdomain.com"
+DEBUG_ENABLED = "true"
+WORKER_NAME = "Your Email Worker Name"
+TIMEZONE = "Asia/Bangkok"
+
+[[d1_databases]]
+binding = "D1"
+database_name = "your-database-name"
+database_id = "your-database-id-here"
+
+[triggers]
+crons = ["*/5 * * * *"]  # Run cleanup every 5 minutes 
