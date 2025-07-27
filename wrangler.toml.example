@@ -12,6 +12,7 @@ TARGET_EMAIL = "your-email@yourdomain.com"
 DEBUG_ENABLED = "true"
 WORKER_NAME = "Your Email Worker Name"
 TIMEZONE = "Asia/Bangkok"
+EMAIL_RETENTION_MINUTES = "15"
 
 [[d1_databases]]
 binding = "D1"

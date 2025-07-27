@@ -6,7 +6,7 @@ A Cloudflare Worker that receives, stores, and displays emails with automatic cl
 
 - **📧 Email Reception**: Receives emails via Cloudflare Email Routing
 - **💾 Temporary Storage**: Stores emails in Cloudflare D1 database
-- **🗑️ Auto-Cleanup**: Automatically deletes emails after 15 minutes
+- **🗑️ Auto-Cleanup**: Automatically deletes emails after configurable time (default: 15 minutes)
 - **🌐 Web Interface**: Clean, responsive web UI to view emails
 - **🕒 Timezone Support**: Configurable timezone display (default: UTC+7)
 - **🔄 Navigation**: Easy navigation between emails with Previous/Next buttons
@@ -42,6 +42,7 @@ A Cloudflare Worker that receives, stores, and displays emails with automatic cl
    - `TARGET_EMAIL`: Email address to capture
    - `WORKER_NAME`: Display name for the worker
    - `TIMEZONE`: Your preferred timezone (e.g., "Asia/Bangkok", "America/New_York")
+   - `EMAIL_RETENTION_MINUTES`: How long to keep emails before auto-deletion (default: 15)
 
 3. **Create D1 Database**
    ```bash
@@ -80,7 +81,7 @@ Emails are automatically:
 - Parsed using PostalMime
 - Stored with sender, subject, content (text + HTML)
 - Assigned unique IDs and timestamps
-- Cleaned up after 15 minutes
+- Cleaned up after configurable retention time (default: 15 minutes)
 
 ## ⚙️ Configuration
 
@@ -92,6 +93,7 @@ Emails are automatically:
 | `DEBUG_ENABLED` | Enable debug logging | `true` / `false` |
 | `WORKER_NAME` | Display name | `My Email Worker` |
 | `TIMEZONE` | Display timezone | `Asia/Bangkok` |
+| `EMAIL_RETENTION_MINUTES` | Auto-cleanup time in minutes | `15` / `30` / `60` |
 
 ### Timezone Options
 
@@ -101,6 +103,16 @@ Common timezone values:
 - `America/New_York` - UTC-5/-4 (US Eastern)
 - `Europe/London` - UTC+0/+1 (UK)
 - `UTC` - UTC+0
+
+### Email Retention
+
+Configure how long emails are kept before automatic deletion:
+- `EMAIL_RETENTION_MINUTES = "15"` - 15 minutes (default)
+- `EMAIL_RETENTION_MINUTES = "30"` - 30 minutes
+- `EMAIL_RETENTION_MINUTES = "60"` - 1 hour
+- `EMAIL_RETENTION_MINUTES = "1440"` - 24 hours
+
+**Note**: Shorter retention times improve privacy and reduce storage costs, but may miss emails if not checked frequently.
 
 ## 🔧 Development
 
@@ -132,7 +144,7 @@ wrangler d1 export your-database-name --output backup.sql
 
 ## 🔒 Security Considerations
 
-- **Temporary Storage**: Emails auto-delete after 15 minutes
+- **Temporary Storage**: Emails auto-delete after configurable time (default: 15 minutes)
 - **Single Target**: Only captures emails sent to the configured `TARGET_EMAIL`
 - **No Authentication**: The web interface is public (consider adding Cloudflare Access if needed)
 - **Debug Logging**: Disable `DEBUG_ENABLED` in production to avoid sensitive data in logs
@@ -157,7 +169,7 @@ wrangler d1 export your-database-name --output backup.sql
 - **Automatic**: Runs every 5 minutes via cron trigger
 - **On Email**: Triggers after each new email is stored
 - **Manual**: Available via `/cleanup` endpoint
-- **Retention**: 15 minutes from `received_at` timestamp
+- **Retention**: Configurable minutes from `received_at` timestamp (set via `EMAIL_RETENTION_MINUTES`)
 
 ## 🎨 UI Features
 

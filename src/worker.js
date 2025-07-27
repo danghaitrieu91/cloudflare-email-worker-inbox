@@ -20,24 +20,25 @@ function formatDateWithTimezone(dateString, timezone) {
   }
 }
 
-// Helper function to clean up old emails (older than 15 minutes)
+// Helper function to clean up old emails based on retention setting
 async function cleanupOldEmails(env) {
   try {
-    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    const retentionMinutes = parseInt(env.EMAIL_RETENTION_MINUTES || '15');
+    const cutoffTime = new Date(Date.now() - retentionMinutes * 60 * 1000).toISOString();
     
     if (env.DEBUG_ENABLED === 'true') {
-      console.log(`Cleaning up emails older than: ${fifteenMinutesAgo}`);
+      console.log(`Cleaning up emails older than ${retentionMinutes} minutes: ${cutoffTime}`);
     }
     
     // First, count how many emails will be deleted
     const countResult = await env.D1.prepare(
       `SELECT COUNT(*) as count FROM emails WHERE received_at < ?`
-    ).bind(fifteenMinutesAgo).first();
+    ).bind(cutoffTime).first();
     
     // Delete old emails
     const deleteResult = await env.D1.prepare(
       `DELETE FROM emails WHERE received_at < ?`
-    ).bind(fifteenMinutesAgo).run();
+    ).bind(cutoffTime).run();
     
     if (env.DEBUG_ENABLED === 'true') {
       console.log(`Cleanup completed: ${countResult.count} emails deleted, success: ${deleteResult.success}`);
@@ -45,13 +46,16 @@ async function cleanupOldEmails(env) {
     
     return {
       deleted_count: countResult.count,
-      success: deleteResult.success
+      success: deleteResult.success,
+      retention_minutes: retentionMinutes
     };
   } catch (error) {
     console.error('Error during email cleanup:', error);
+    const retentionMinutes = parseInt(env.EMAIL_RETENTION_MINUTES || '15');
     return {
       deleted_count: 0,
       success: false,
+      retention_minutes: retentionMinutes,
       error: error.message
     };
   }
