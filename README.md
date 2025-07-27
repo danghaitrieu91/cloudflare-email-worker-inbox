@@ -27,9 +27,9 @@ A Cloudflare Worker that receives, stores, and displays emails with automatic cl
 
 1. **Clone and Install**
    ```bash
-   git clone <your-repo>
-   cd <your-project-folder>
-   npm install
+   git clone https://github.com/taicv/cloudflare-email-worker-inbox
+   cd cloudflare-email-worker-inbox
+   pnpm install
    ```
 
 2. **Configure Wrangler**
@@ -46,14 +46,14 @@ A Cloudflare Worker that receives, stores, and displays emails with automatic cl
 
 3. **Create D1 Database**
    ```bash
-   wrangler d1 create your-database-name
+   npx wrangler d1 create your-database-name
    ```
    
    Copy the database ID from the output to your `wrangler.toml`
 
 4. **Initialize Database**
    ```bash
-   wrangler deploy
+   npx wrangler deploy
    # Then visit: https://your-worker.your-subdomain.workers.dev/db-init
    ```
 
@@ -114,33 +114,6 @@ Configure how long emails are kept before automatic deletion:
 
 **Note**: Shorter retention times improve privacy and reduce storage costs, but may miss emails if not checked frequently.
 
-## 🔧 Development
-
-### Local Development
-```bash
-npm run dev
-# or
-wrangler dev
-```
-
-### Deployment
-```bash
-npm run deploy
-# or
-wrangler deploy
-```
-
-### Database Management
-```bash
-# List databases
-wrangler d1 list
-
-# Query database
-wrangler d1 execute your-database-name --command "SELECT * FROM emails LIMIT 5"
-
-# Backup database
-wrangler d1 export your-database-name --output backup.sql
-```
 
 ## 🔒 Security Considerations
 
@@ -192,7 +165,7 @@ wrangler d1 export your-database-name --output backup.sql
 1. **Emails not appearing**
    - Check Email Routing configuration in Cloudflare Dashboard
    - Verify `TARGET_EMAIL` matches the routing rule
-   - Check worker logs: `wrangler tail`
+   - Check worker logs: `npx wrangler tail`
 
 2. **Database errors**
    - Run `/db-init` to initialize tables
