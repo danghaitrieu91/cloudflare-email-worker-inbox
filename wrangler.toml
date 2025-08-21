@@ -1,0 +1,23 @@
+name = "cloudflare-email-worker-inbox"
+main = "src/worker.js"
+workers_dev = true
+compatibility_date = "2000-01-01"
+
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
+
+[vars]
+TARGET_EMAIL = "email-worker-inbox@donghohaitrieu.vn"
+DEBUG_ENABLED = "true"
+WORKER_NAME = "Email Worker Inbox"
+TIMEZONE = "Asia/Bangkok"
+EMAIL_RETENTION_MINUTES = "30"
+
+[[d1_databases]]
+binding = "D1"
+database_name = "email-worker"
+database_id = "1863777c-3eff-4f8c-8ed9-7b3a08b8b46e"
+
+[triggers]
+crons = ["*/5 * * * *"]  # Run cleanup every 5 minutes 
