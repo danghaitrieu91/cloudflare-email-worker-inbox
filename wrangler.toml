@@ -5,7 +5,7 @@ compatibility_date = "2025-08-21"
 
 [observability]
 enabled = true
-head_sampling_rate = 1 # optional. default = 1.
+head_sampling_rate = 1
 
 [vars]
 TARGET_EMAIL = "email-worker-inbox@donghohaitrieu.vn"
@@ -20,4 +20,4 @@ database_name = "email-worker"
 database_id = "1863777c-3eff-4f8c-8ed9-7b3a08b8b46e"
 
 [triggers]
-crons = ["*/5 * * * *"]  # Run cleanup every 5 minutes 
+crons = ["*/5 * * * *"]
