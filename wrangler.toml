@@ -1,7 +1,7 @@
 name = "cloudflare-email-worker-inbox"
 main = "src/worker.js"
 workers_dev = true
-compatibility_date = "2000-01-01"
+compatibility_date = "2025-08-21"
 
 [observability]
 enabled = true
