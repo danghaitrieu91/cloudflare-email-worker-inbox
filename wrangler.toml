@@ -9,7 +9,7 @@ head_sampling_rate = 1
 
 [vars]
 TARGET_EMAIL = "email-worker-inbox@donghohaitrieu.vn"
-DEBUG_ENABLED = "true"
+DEBUG_ENABLED = "false"
 WORKER_NAME = "Email Worker Inbox"
 TIMEZONE = "Asia/Bangkok"
 EMAIL_RETENTION_MINUTES = "30"
